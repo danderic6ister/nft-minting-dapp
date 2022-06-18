@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "./node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
-import "./node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "./node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "../node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     // Returns whether or not the contract is active 
@@ -56,7 +56,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         
     }
     // sets the state of the contract to true 
-    function setContractActive(bool _isActive) public  onlyOwner returns(uint256 memory){
+    function setContractActive(bool _isActive) public  onlyOwner returns(uint256){
         require(_isActive);
        isActive = _isActive;
        timeContractIsActive = block.timestamp;
@@ -64,8 +64,21 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
     }
 
-    function setBaseURI(string calldata _baseURI) onlyOwner{
+    function setBaseURI(string calldata _baseURI) public onlyOwner{
         baseURI = _baseURI;
+    }
+     function supportsInterface(bytes4 interfaceId) public view  override(ERC721,ERC721Enumerable) returns (bool) {
+        return interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+     ) internal  override(ERC721,ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+
+
     }
 
    
