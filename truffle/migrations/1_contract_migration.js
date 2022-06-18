@@ -1,0 +1,5 @@
+const x0x0x = artifacts.require("x0x0x");
+
+module.exports = function (deployer) {
+  deployer.deploy(x0x0x);
+};
