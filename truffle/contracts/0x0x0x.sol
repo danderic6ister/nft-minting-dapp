@@ -48,6 +48,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     mapping(address => uint256) public txPerformedInPublicSaleMint;
 
     uint256 public timeContractIsActive;
+    uint256 
 
 
 
