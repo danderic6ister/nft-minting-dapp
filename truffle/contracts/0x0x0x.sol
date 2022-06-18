@@ -13,7 +13,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     bool public whitelistMintIsActive = false;
     bool public publicMintIsActive = false;
 
-    // Dev Sets the total Supply of the NFT collection 
+    // @dev Sets the total Supply of the NFT collection 
     uint256 public maxSupply = 200;
     // Dev Sets the price of whitelist sale
     uint256 public immutable whitelistPrice = 0.01 ether;
@@ -47,6 +47,9 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     mapping(address => uint256) public txPerformedInWhitelist;
     mapping(address => uint256) public txPerformedInPublicSaleMint;
 
+    uint256 public timeContractIsActive;
+
+
 
     // Sets the name and symbol of the collection
     constructor()ERC721("x0x0x","x0x0x"){
@@ -54,10 +57,10 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     }
     // sets the state of the contract to true 
     function setContractActive(bool _isActive) public  onlyOwner returns(uint256 memory){
-        require(_isActive){
-            
-        }
-
+        require(_isActive);
+       isActive = _isActive;
+       timeContractIsActive = block.timestamp;
+       return timeContractIsActive;
 
     }
 
