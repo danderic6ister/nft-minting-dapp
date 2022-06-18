@@ -64,6 +64,10 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
     }
 
+    function setBaseURI(string calldata _baseURI) onlyOwner{
+        baseURI = _baseURI;
+    }
+
    
     
 
