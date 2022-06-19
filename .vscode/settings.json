@@ -1,0 +1,11 @@
+{
+  "solidity-va.outline.decorations": true,
+  "solidity-va.outline.enable": true,
+  "solidity-va.deco.arguments": true,
+  "solidity-va.deco.statevars": true,
+  "solidity-va.codelens.graph.enable": true,
+  "solidity-va.codelens.funcSigs.enable": true,
+  "solidity-va.outline.inheritance.show": true,
+  "solidity-va.outline.extras": true,
+  "solidity-va.hover": true
+}
