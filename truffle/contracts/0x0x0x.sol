@@ -98,8 +98,8 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
        
     }
 
-    function setBaseURI(string calldata _baseURI) public onlyOwner{
-        baseURI = _baseURI;
+    function setBaseURI(string calldata BaseURI) public onlyOwner{
+        baseURI = BaseURI;
     }
      function supportsInterface(bytes4 interfaceId) public view  override(ERC721,ERC721Enumerable) returns (bool) {
         return interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
