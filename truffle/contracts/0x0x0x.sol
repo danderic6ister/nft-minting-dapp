@@ -9,6 +9,7 @@ import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     // Returns whether or not the contract is active 
     bool    public isActive = false ;
+
     // Tracks the state of the whitelistMint and PublicMint
     bool public whitelistMintIsActive = false;
     bool public publicMintIsActive = false;
@@ -18,7 +19,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     // Dev Sets the price of whitelist sale
     uint256 public immutable whitelistPrice = 0.01 ether;
     // Dev sets the price of Public Sale 
-    uint256 public publicPrice = 0.02 ether ;
+    uint256 public immutable publicPrice = 0.02 ether ;
     // DEv sets the base uri of th collection
     string public baseURI;
 
@@ -48,8 +49,9 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     mapping(address => uint256) public txPerformedInPublicSaleMint;
 
     uint256 public timeContractIsActive;
-    uint256 
-
+    uint256 public whitelistMintStarts = timeContractIsActive + 20;
+    uint256 public whitelistMintEnds = whitelistMintStarts + 400;
+    uint256 public publicMintStarts = whitelistMintEnds +20;
 
 
     // Sets the name and symbol of the collection
@@ -63,6 +65,37 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
        timeContractIsActive = block.timestamp;
        return timeContractIsActive;
 
+    }
+    // @dev retuns Merkle root of whitelisted addresses
+    function whitelistMintMerkleRoot() public view returns(bytes32){
+        return MerkleRoot;
+    }
+    
+    //   @dev Owner sets the base URI of the contract
+    function setBaseURI(string calldata BaseURI)public onlyOwner{
+        baseURI = BaseURI;
+    }
+    // @dev Function returns the baseURI of the contract
+    function _baseURI() internal view override returns (string memory) {
+        return baseURI;
+    }
+    function supportsInterface(bytes4 interfaceId) public view virtual override( ERC721,ERC721Enumerable) returns (bool) {
+        return interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
+    }
+    function setPriceForPublicMint(uint256 newPrice)private onlyOwner {
+        require(newPrice >publicPrice , "New Price must be greater than old price");
+        require(newPrice < 0.05, 'new price cannot be more than 0.05 eth');
+        publicPrice = newPrice;
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+     ) internal override(ERC721,ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+
+       
     }
 
     function setBaseURI(string calldata _baseURI) public onlyOwner{

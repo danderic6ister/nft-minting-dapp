@@ -18,7 +18,7 @@ module.exports = {
    
     
     rinkeby: {
-      provider: () => new HDWalletProvider(process.env.seed, `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`),
+      provider: () => new HDWalletProvider(process.env.seed, `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`),
       network_id: 4,       // Rinkeby's id
       gas: 5500000,        // Rinkeby has a lower block limit than mainnet
       confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
@@ -35,9 +35,7 @@ module.exports = {
   },
 
   // Set default mocha options here, use special reporters, etc.
-  mocha: {
-    // timeout: 100000
-  },
+ 
 
   // Configure your compilers
   compilers: {
