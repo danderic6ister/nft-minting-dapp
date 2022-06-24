@@ -8,6 +8,8 @@ import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 
 
+
+
 contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     /**  @dev Returns whether or not the contract is active */
     bool    public isActive ;
@@ -18,7 +20,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     uint256 public maxSupply = 200;
 
     /**  @dev Sets the price of whitelist sale */
-    uint256 public immutable whitelistPrice = 0.01 ether;
+    uint256 public  whitelistPrice = 0.01 ether;
 
     /**  @dev sets the price of Public Sale  */ 
     uint256 public  publicPrice = 0.02 ether ;
@@ -60,7 +62,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     /**  @dev Initializes the time the contract is deployed and hardcodes it for other variables  */
     uint256 public timeContractIsActive = block.timestamp ;
     uint256 public whitelistMintStarts = timeContractIsActive + 20;
-    uint256 public whitelistMintEnds = whitelistMintStarts + 400;
+    uint256 public whitelistMintEnds = whitelistMintStarts + 200;
     uint256 public publicMintStarts = whitelistMintEnds +20;
 
     bool public whitelistIsActive = false;
@@ -127,11 +129,12 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
     function mintToTeam() public onlyOwner {
         require(!teamHasClaimed, "You have claimed already.");
+        
         for(uint i =0 ; i< teamSupply; i++){
-            _mint(msg.sender,totalSupply());
+            _mint(msg.sender, totalSupply() +1);
         }
         teamHasClaimed = true;
-        teamSupply =0;
+        
 
         isActive = true;
 
@@ -175,8 +178,8 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         //  require(mintPerfomedInPublicSaleMint[msg.sender]< 1,"You can only perform1 mint ")
          require(txPerformedInPublicSaleMint[msg.sender] <maxTx,"You can onlt send one transaction from your address and you already did.");
          require(publicPrice *mintAmount >= msg.value,"the amount you are abount to send is lees than what you should pay.");
-         require(totalSupply() + mintAmount <= maxSupply-amountForAirdrops-teamSupply, "Minted Out" );
-         _mint(msg.sender,totalSupply());
+         require(totalSupply() <= maxSupply-amountForAirdrops, "Minted Out" );
+         _mint(msg.sender,totalSupply() +1);
 
          txPerformedInPublicSaleMint[msg.sender] ++;
          mintPerformedInPublicSaleMint[msg.sender] ++;
@@ -208,11 +211,11 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         require(mintPerformedInWhitelistMint[msg.sender] < maxMintForWhitelist, "You can only mint a max of 2 nfts  and you already did.");
         require(txPerformedInWhitelistMint[msg.sender] < maxTx , "You can only send one transaction from your address to this contract and you already did.");
         require(whitelistPrice * mintAmount >= msg.value , "The amount you are about to send is less than what you should pay.");
-        require(totalSupply() + mintAmount <= maxSupply - amountForAirdrops- teamSupply, "Minted out.");
-        uint _id = totalSupply();
+        require(totalSupply()  <= maxSupply - amountForAirdrops, "Minted out.");
+        
         for (uint256 i = 0; i<mintAmount; i++){
 
-            _mint(msg.sender,++_id);
+            _mint(msg.sender, totalSupply() +1);
 
         }
         txPerformedInWhitelistMint[msg.sender] ++;
@@ -264,7 +267,24 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
 
 
-}
+ }
+// /**
+// [
+//   "0xd8d21303ee4c21f0079ae1976c52866e0860b24fad2110d44ea9504486eecf33",
+//   "0xe48e16d82c4a66e30ba3a731d1df05af5a006c954e90512805f233ff2b6bfc1d"
+// ]
+// [
+//   "0xed20234281228b5eff2144333de9667d881943134261bffae730cb6618925ca3",
+//   "0x5ee6d1aa97362b65082e32f95317840d66096b7aaf06db0ed750e9f2ca114108",
+//   "0x493bea813a8507332859e614b54c863b040f254076059d24296275045ca7c41d"
+// ]
+
+// 222
+// [
+//   "0x96fddd347239aefee3d37007c6270bcea710d334f3fc8653fd2447f4898398a0",
+//   "0x5ee6d1aa97362b65082e32f95317840d66096b7aaf06db0ed750e9f2ca114108",
+//   "0x493bea813a8507332859e614b54c863b040f254076059d24296275045ca7c41d"
+// ]
 
 
 
