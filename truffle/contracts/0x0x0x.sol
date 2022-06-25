@@ -129,6 +129,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
     function mintToTeam() public onlyOwner {
         require(!teamHasClaimed, "You have claimed already.");
+        require(!isActive , "The contract is already active.");
         
         for(uint i =0 ; i< teamSupply; i++){
             _mint(msg.sender, totalSupply() +1);
@@ -228,10 +229,20 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
   /** @dev withdraws funds from contract  */
     function withdraw() public payable onlyOwner{
         // address ContractOwner = msg.sender;
+        address owner_ = owner() ;
 
-        payable(owner()).transfer(address(this).balance);
+        payable(owner_).transfer(address(this).balance);
 
-    }  
+    } 
+
+    
+
+  /**@dev Airdrops to selected account */
+    function airdrop (address to)  public onlyOwner{
+        require( amountForAirdrops >= 1, "You can't airdrop anymore tokens.");
+        _mint(to,totalSupply()+1);
+        amountForAirdrops -= 1;
+    }
   /** @dev routine  implementation for inheriting from  ERC721Enumerable.sol */  
 
     function _beforeTokenTransfer(
