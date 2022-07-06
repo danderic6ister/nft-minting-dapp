@@ -1,0 +1,39 @@
+{
+  "name": "x0x0x0 #11",
+  "description": "Collection of test random eyes ready to change the world.",
+  "image": "ipfs://bafybeigtmoocdj57sldbjum556aulndiwtwu5egdu72cwqpzcetoviezdy/11.png",
+  "dna": "7b7394f6fcf746e9f316dcb8ec896e48ab677879",
+  "edition": 11,
+  "date": 1655136321444,
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Eyeball",
+      "value": "Red"
+    },
+    {
+      "trait_type": "Eye color",
+      "value": "Yellow"
+    },
+    {
+      "trait_type": "Iris",
+      "value": "Small"
+    },
+    {
+      "trait_type": "Shine",
+      "value": "Shapes"
+    },
+    {
+      "trait_type": "Bottom lid",
+      "value": "Middle"
+    },
+    {
+      "trait_type": "Top lid",
+      "value": "High"
+    }
+  ],
+  "compiler": "HashLips Art Engine"
+}

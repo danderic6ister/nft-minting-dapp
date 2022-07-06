@@ -7,20 +7,18 @@ import "../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721En
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
 
-
-
-
 contract x0x0x is ERC721,ERC721Enumerable,Ownable{
+    using Strings for uint256;
     /**  @dev Returns whether or not the contract is active */
     bool    public isActive ;
 
     /**  Tracks the state of the whitelistMint and PublicMint */
 
     /**  @dev Sets the total Supply of the NFT collection  */
-    uint256 public maxSupply = 200;
+    uint256 public immutable  maxSupply = 70;
 
     /**  @dev Sets the price of whitelist sale */
-    uint256 public  whitelistPrice = 0.01 ether;
+    uint256 public immutable  whitelistPrice = 0.01 ether;
 
     /**  @dev sets the price of Public Sale  */ 
     uint256 public  publicPrice = 0.02 ether ;
@@ -29,7 +27,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     string public baseURI;
 
     /**  @dev sets the base uri of the collection  */
-    uint256 public teamSupply = 20;
+    uint256 public teamSupply = 50;
 
     /**  @dev sets the total amount available for airdrops  */
     uint256 public amountForAirdrops = 15;
@@ -65,9 +63,10 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     uint256 public whitelistMintEnds = whitelistMintStarts + 200;
     uint256 public publicMintStarts = whitelistMintEnds +20;
 
-    bool public whitelistIsActive = false;
-    bool public publicMintIsActive = false;
+    bool public whitelistIsActive ;
+    bool public publicMintIsActive ;
     bool public teamHasClaimed ;
+    bool public revealed ;
 
 
     /** @dev Sets the name and symbol of the collection */ 
@@ -93,7 +92,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
     }
     
     /**  @dev Owner sets the base URI of the contract */ 
-    function setBaseURI(string calldata BaseURI)public onlyOwner{
+    function setBaseURI(string memory BaseURI)public onlyOwner{
         baseURI = BaseURI;
     }
     /**  @dev Function returns the baseURI of the contract */
@@ -124,8 +123,15 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         }
     }
 
+    /** @dev Sets the reveeled staus  */
+    function changeRevealedStatus(bool _revealed) public onlyOwner contractIsActive{
+        revealed = _revealed;
+
+    }
+
     /** @dev mints the team supply to thier wallet.
         The team needs to mint to treasury after which the contract becomes active */
+        
 
     function mintToTeam() public onlyOwner {
         require(!teamHasClaimed, "You have claimed already.");
@@ -179,7 +185,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         //  require(mintPerfomedInPublicSaleMint[msg.sender]< 1,"You can only perform1 mint ")
          require(txPerformedInPublicSaleMint[msg.sender] <maxTx,"You can onlt send one transaction from your address and you already did.");
          require(publicPrice *mintAmount >= msg.value,"the amount you are abount to send is lees than what you should pay.");
-         require(totalSupply() <= maxSupply-amountForAirdrops, "Minted Out" );
+         require(totalSupply() + mintAmount <= maxSupply-amountForAirdrops, "Minted Out" );
          _mint(msg.sender,totalSupply() +1);
 
          txPerformedInPublicSaleMint[msg.sender] ++;
@@ -212,7 +218,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         require(mintPerformedInWhitelistMint[msg.sender] < maxMintForWhitelist, "You can only mint a max of 2 nfts  and you already did.");
         require(txPerformedInWhitelistMint[msg.sender] < maxTx , "You can only send one transaction from your address to this contract and you already did.");
         require(whitelistPrice * mintAmount >= msg.value , "The amount you are about to send is less than what you should pay.");
-        require(totalSupply()  <= maxSupply - amountForAirdrops, "Minted out.");
+        require(totalSupply() + mintAmount <= maxSupply - amountForAirdrops, "exceeds supply.");
         
         for (uint256 i = 0; i<mintAmount; i++){
 
@@ -235,7 +241,7 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 
     } 
 
-    
+
 
   /**@dev Airdrops to selected account */
     function airdrop (address to)  public onlyOwner{
@@ -263,6 +269,28 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    function tokenURI(uint256 tokenId) public view  override returns (string memory) {
+        require(_exists(tokenId), "ERC721URIStorage: URI query for nonexistent token");
+
+        // string memory _tokenURI = _tokenURIs[tokenId];
+        string memory base = _baseURI();
+
+        if (revealed == false) {
+            return
+                bytes(base).length > 0
+                    ? string(abi.encodePacked(base, "hidden.json"))
+                    : "";
+        } else {
+            return
+                bytes(base).length > 0
+                    ? string(
+                        abi.encodePacked(base, tokenId.toString(), ".json"))
+                    : "";
+        }
+
+        
     }
 
    
@@ -296,6 +324,9 @@ contract x0x0x is ERC721,ERC721Enumerable,Ownable{
 //   "0x5ee6d1aa97362b65082e32f95317840d66096b7aaf06db0ed750e9f2ca114108",
 //   "0x493bea813a8507332859e614b54c863b040f254076059d24296275045ca7c41d"
 // ]
+
+
+
 
 
 
